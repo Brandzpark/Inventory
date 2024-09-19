@@ -19,15 +19,19 @@ import {
 import { DataTableProps } from "@/typings/data-table";
 import { useState } from "react";
 import LoadingSpinner from "../LoadingSpinner";
+import DataTablePagination from "./DataTablePagination";
+import { IPaginated } from "@/typings/typings";
 
 type Props<TData, TValue> = DataTableProps<TData, TValue> & {
   loading?: boolean;
+  paginationData?: IPaginated | null;
 };
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
   loading,
+  paginationData,
 }: Props<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
@@ -43,7 +47,7 @@ export default function DataTable<TData, TValue>({
   return (
     <>
       {" "}
-      <Table>
+      <Table className="mb-5" >
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -85,6 +89,9 @@ export default function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      {paginationData && paginationData?.totalPages > 1 && (
+        <DataTablePagination paginationData={paginationData} />
+      )}
     </>
   );
 }

@@ -16,7 +16,7 @@ export function MainSelect(props: Props) {
     const { children, placeholder } = props
     return (
         <Select {...props} >
-            <SelectTrigger>
+            <SelectTrigger className='capitalize'>
                 <SelectValue placeholder={placeholder ?? "Select"} />
             </SelectTrigger>
             <SelectContent>

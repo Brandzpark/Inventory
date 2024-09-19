@@ -29,6 +29,8 @@ import { loginApi } from "@/api/public";
 import { setCookie, getCookie } from "cookies-next";
 import { AxiosResponse } from "axios";
 import { errorHandler } from "@/lib/helpers";
+import Image from "next/image";
+import { Icons } from "@/icons";
 
 export default function page() {
   const router = useRouter();
@@ -53,7 +55,7 @@ export default function page() {
     setLoading(true);
     try {
       const response: AxiosResponse = await loginApi(values);
-      setCookie("token", response?.data?.token,{maxAge: 5000000});
+      setCookie("token", response?.data?.token, { maxAge: 5000000 });
       setLoading(false);
       router.replace("/dashboard");
     } catch (error) {
@@ -67,8 +69,8 @@ export default function page() {
 
   return (
     <Card className="w-[26rem]">
-      <CardHeader>
-        <CardTitle className="text-center">Login</CardTitle>
+      <CardHeader className="flex justify-center items-center">
+        <Icons.Logo />
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -109,7 +111,9 @@ export default function page() {
             </Link>
           </CardContent>
           <CardFooter>
-            <Button disabled={loading}>Login</Button>
+            <Button size={"lg"} className="w-full" disabled={loading}>
+              Login
+            </Button>
           </CardFooter>
         </form>
       </Form>

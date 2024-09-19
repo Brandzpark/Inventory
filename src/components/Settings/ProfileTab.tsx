@@ -45,7 +45,6 @@ export default function ProfileTab({}: Props) {
     setloading(true);
     try {
       const { data } = await updateUserBaseApi({ ...userData, ...values });
-      console.log(data);
       toast.success("User Updated");
       setloading(false);
     } catch (error) {

@@ -30,7 +30,7 @@ export default function Header({ breadcrumbs, title }: Props) {
                 <Breadcrumb>
                     <BreadcrumbList>
                         <BreadcrumbItem>
-                            <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+                            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
                         </BreadcrumbItem>
                         {breadcrumbs && breadcrumbs?.length > 0 && <BreadcrumbSeparator />}
                         {breadcrumbs?.map((row, index) => {
