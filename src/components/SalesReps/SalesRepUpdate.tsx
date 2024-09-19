@@ -6,7 +6,7 @@ import SalesRepForm from "./SalesRepForm";
 import { findSalesRepBycodeApi } from "@/api/salesReps";
 import { ISalesRep } from "@/typings/salesReps";
 import { ICustomer } from "@/typings/customer";
-import { getAllCustomersApi, getAllCustomersNoPaginateApi } from "@/api/customer";
+import { getAllCustomersNoPaginateApi } from "@/api/customer";
 
 type Props = {
   code: string;
@@ -18,15 +18,15 @@ export default function SalesRepUpdate({ code }: Props) {
   const [customers, setCustomers] = useState<ICustomer[] | []>([]);
 
   useEffect(() => {
-    async function fetchCustomer() {
+    async function fetchData() {
       setLoading(true);
       const { data } = await findSalesRepBycodeApi({ code: code });
       const customerReponse = await getAllCustomersNoPaginateApi({});
       setSalesRep(data?.data);
-      setCustomers(customerReponse?.data?.data)
+      setCustomers(customerReponse?.data?.data);
       setLoading(false);
     }
-    fetchCustomer();
+    fetchData();
   }, []);
 
   return (

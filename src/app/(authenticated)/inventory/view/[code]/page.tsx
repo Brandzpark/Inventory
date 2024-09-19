@@ -1,7 +1,8 @@
 import React from "react";
 import Header from "@/components/Header/Header";
 import { Metadata } from "next";
-import SalesRepUpdate from "@/components/SalesReps/SalesRepUpdate";
+import ProductUpdate from "@/components/Inventory/ProductUpdate";
+import ProductView from "@/components/Inventory/ProductView";
 
 type Props = {
   params: {
@@ -10,25 +11,25 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-  title: "Suppler Update",
+  title: "Item View",
 };
 
 export default function page({ params }: Props) {
   const { code } = params;
   const breadcrubmbs = [
     {
-      title: "Sales Rep",
-      href: "/salesReps",
+      title: "Inventory Management",
+      href: "/inventory",
     },
     {
-      title: code,
+      title: `View ${code}`,
       href: "",
     },
   ];
   return (
     <div>
       <Header breadcrumbs={breadcrubmbs} />
-      <SalesRepUpdate code={code} />
+      <ProductView code={code} />
     </div>
   );
 }

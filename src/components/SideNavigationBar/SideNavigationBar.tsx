@@ -17,6 +17,7 @@ import {
   WarehouseIcon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { Icons } from "@/icons";
 
 type Props = {};
 
@@ -25,9 +26,7 @@ export default function SideNavigationBar({}: Props) {
 
   return (
     <div className="hidden lg:block min-w-[17rem] bg-white shadow-lg border-r min-h-screen px-5">
-      <div className="h-[6rem] flex justify-center items-center bg-gray-300 mb-5 mt-2">
-        LOGO
-      </div>
+      <Icons.Logo className="my-8" />
       <SideNavigationBarItem
         title={"Dashboard"}
         icon={<LayoutDashboardIcon className="w-5 h-5" />}
@@ -36,7 +35,7 @@ export default function SideNavigationBar({}: Props) {
       />
       <div className="text-sm text-slate-500 my-5 uppercase">Inventory</div>
       <SideNavigationBarItem
-        title={"Inventory Manage"}
+        title={"Inventory Management"}
         icon={<PackageIcon className="w-5 h-5" />}
         href="/inventory"
         active={pathname.startsWith("/inventory")}

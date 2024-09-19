@@ -38,7 +38,7 @@ export default function SupplierForm({ supplier }: Props) {
   const router = useRouter();
   const [loading, setloading] = useState(false);
 
-  const supplerForm = useForm<Yup.InferType<typeof createSchema>>({
+  const supplerForm = useForm<any>({
     resolver: yupResolver(createSchema),
     values: {
       ...supplier,

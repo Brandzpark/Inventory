@@ -11,11 +11,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { MainContext } from "@/lib/MainContext";
+import { deleteCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 export default function User({}: Props) {
   const { userData } = useContext(MainContext);
+  const router = useRouter();
+  function onLogout() {
+    deleteCookie("token");
+    router.replace("/");
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,7 +40,9 @@ export default function User({}: Props) {
         <Link href={"/settings/profile"}>
           <DropdownMenuItem className="w-40">Profile</DropdownMenuItem>
         </Link>
-        <DropdownMenuItem className=" text-red-500">Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={onLogout} className=" text-red-500">
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

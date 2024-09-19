@@ -34,8 +34,9 @@ const MainContextProvider = ({ children }: ProviderPorps) => {
         console.log(error);
       }
     }
-
-    fetchUserData();
+    if (!["/"].includes(pathName)) {
+      fetchUserData();
+    }
   }, [pathName]);
 
   return (

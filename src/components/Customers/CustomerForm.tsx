@@ -35,7 +35,7 @@ export default function CustomerForm({ customer }: Props) {
   const router = useRouter();
   const [loading, setloading] = useState(false);
 
-  const customerForm = useForm<Yup.InferType<typeof createSchema>>({
+  const customerForm = useForm<any>({
     resolver: yupResolver(createSchema),
     values: {
       ...customer,
@@ -57,7 +57,7 @@ export default function CustomerForm({ customer }: Props) {
     router.push("/customers");
     return;
   }
-console.log(customerForm?.formState.errors);
+  console.log(customerForm?.formState.errors);
 
   return (
     <Card className="py-1 rounded-sm">

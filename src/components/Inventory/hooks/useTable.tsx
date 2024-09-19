@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,21 +7,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { ICustomer } from "@/typings/customer";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import { deleteCustomerApi } from "@/api/customer";
 import { toast } from "sonner";
+import { IProduct } from "@/typings/product";
+import { deleteProductApi } from "@/api/product";
 
 export function useTable({ fetchData }: { fetchData: () => void }) {
   const router = useRouter();
-  const [selectedDeleteItem, setSelectedDeleteItem] =
-    useState<ICustomer | null>(null);
+  const [selectedDeleteItem, setSelectedDeleteItem] = useState<IProduct | null>(
+    null
+  );
 
   async function onDelete() {
-    const { data } = await deleteCustomerApi({ _id: selectedDeleteItem?._id });
-    toast.success("Customer Deleted Successfully");
+    const { data } = await deleteProductApi({ _id: selectedDeleteItem?._id });
+    toast.success("Product Deleted Successfully");
     setSelectedDeleteItem(null);
     fetchData();
   }
@@ -31,37 +31,58 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
     setSelectedDeleteItem(null);
   }
 
-  const columns: ColumnDef<ICustomer>[] | [] = [
+  const columns: ColumnDef<IProduct>[] | [] = [
     {
       accessorKey: "code",
-      header: "Code",
+      header: "Item Code",
     },
     {
       accessorKey: "name",
-      header: "Name",
+      header: "Item Name",
+    },
+
+    {
+      accessorKey: "category",
+      header: "Category",
     },
     {
-      accessorKey: "email",
-      header: "Email",
-    },
-    {
-      accessorKey: "mobileNumber",
-      header: "Phone Number",
+      header: "Stock Level",
+      cell: ({ row }) => {
+        const data = row?.original;
+
+        const quantity =
+          data?.warehouseQuantity?.find((row) => row?.warehouse === "Default")
+            ?.quantity || "0";
+
+        let variant: any = "active";
+
+        if (parseFloat(quantity) < 20) {
+          variant = "warning";
+        }
+        if (parseFloat(quantity) < 5) {
+          variant = "deactivated";
+        }
+        return (
+          <Badge
+            className="text-black w-16 flex justify-end items-center"
+            variant={variant}
+          >
+            {quantity}
+          </Badge>
+        );
+      },
     },
     {
       header: "Status",
       cell: ({ row }) => {
         const data = row?.original;
-        let variant: any = "warning";
-        if (data?.status == "active") {
-          variant = "active";
-        }
-        if (data?.status == "blocked") {
-          variant = "deactivated";
-        }
+
         return (
-          <Badge variant={variant} className="capitalize">
-            {data?.status}
+          <Badge
+            variant={data?.isActive ? "active" : "deactivated"}
+            className="capitalize"
+          >
+            {data?.isActive ? "Active" : "Deactivated"}
           </Badge>
         );
       },
@@ -83,9 +104,14 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push(`/customers/${data?.code}`);
-                    // setSelectedData(data);
-                    // setCreateModel(true);
+                    router.push(`/inventory/view/${data?.code}`);
+                  }}
+                >
+                  View
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push(`/inventory/${data?.code}`);
                   }}
                 >
                   Edit

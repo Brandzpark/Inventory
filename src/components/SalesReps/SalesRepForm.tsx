@@ -17,6 +17,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import Select from "react-select";
+
 import { createSchema } from "@/validationSchemas/salesRepSchemas";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -27,7 +29,6 @@ import { SelectItem } from "../ui/select";
 import { createSalesRepApi, updateSalesRepApi } from "@/api/salesReps";
 import { salutaions } from "@/lib/constants";
 import { ISalesRep } from "@/typings/salesReps";
-import { MultiSelect } from "../ui/multi-select";
 
 type Props = {
   salesRep?: ISalesRep | null;
@@ -35,11 +36,10 @@ type Props = {
 };
 
 export default function SalesRepForm({ salesRep, customers }: Props) {
-  
   const router = useRouter();
   const [loading, setloading] = useState(false);
 
-  const salesRepForm = useForm<Yup.InferType<typeof createSchema>>({
+  const salesRepForm = useForm<any>({
     resolver: yupResolver(createSchema),
     values: {
       ...salesRep,
@@ -49,15 +49,16 @@ export default function SalesRepForm({ salesRep, customers }: Props) {
   async function onSubmit(values: Yup.InferType<typeof createSchema>) {
     if (salesRep) {
       const { data } = await updateSalesRepApi({
-        _id: salesRep?._id,
         ...values,
+        _id: salesRep?._id,
       });
-      console.log(data);
       toast.success("Sales Rep Updated");
       router.push("/salesReps");
       return;
     }
-    const { data } = await createSalesRepApi({ ...values });
+    const { data } = await createSalesRepApi({
+      ...values,
+    });
     toast.success("Sales Rep Created");
     router.push("/salesReps");
     return;
@@ -189,28 +190,34 @@ export default function SalesRepForm({ salesRep, customers }: Props) {
             <CardTitle className="bg-[#FAFAFA] py-2 px-3 rounded-md mt-10">
               Customer Assign
             </CardTitle>
-            <div>
+            <div className="mt-7">
               <FormField
                 disabled={loading}
                 control={salesRepForm.control}
                 name="customers"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title *</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        options={customers}
-                        onValueChange={() => {}}
-                        defaultValue={field.value}
-                        placeholder="Select Customers"
-                        variant="inverted"
-                        animation={2}
-                        maxCount={3}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          defaultValue={field.value}
+                          isMulti
+                          name={field.name}
+                          onChange={field.onChange}
+                          getOptionValue={(row) => row?._id}
+                          getOptionLabel={(row) =>
+                            `${row?.code} | ${row?.name}`
+                          }
+                          closeMenuOnSelect={false}
+                          options={customers}
+                          className="basic-multi-select"
+                          classNamePrefix="select"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             </div>
             <div className="flex justify-end items-center mt-5">

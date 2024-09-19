@@ -12,7 +12,7 @@ export type ISalesRep = {
   mobileNumber: string;
   address: string;
   taxNo: string;
-  customers: ICustomer[] | [];
+  customers: string[];
 };
 
 export type ISalesRepPaginated = {

@@ -1,14 +1,12 @@
 import React from "react";
 import Header from "@/components/Header/Header";
 import { Metadata } from "next";
-import SupplierForm from "@/components/Suppliers/SupplierForm";
-import SalesRepForm from "@/components/SalesReps/SalesRepForm";
-import SalesRepCreate from "@/components/SalesReps/SalesRepCreate";
+import ProductForm from "@/components/Inventory/ProductForm";
 
 const breadcrubmbs = [
   {
-    title: "Sales Rep",
-    href: "/salesReps",
+    title: "Inventory Management",
+    href: "/inventory",
   },
   {
     title: "Create",
@@ -17,7 +15,7 @@ const breadcrubmbs = [
 ];
 
 export const metadata: Metadata = {
-  title: "Sales Rep Create",
+  title: "Item Create",
 };
 
 type Props = {};
@@ -26,7 +24,7 @@ export default function page({}: Props) {
   return (
     <div>
       <Header breadcrumbs={breadcrubmbs} />
-      <SalesRepCreate />
+      <ProductForm />
     </div>
   );
 }
