@@ -4,6 +4,10 @@ export const getAllProductsApi = function (params: any) {
   return AxiosInstance.get("/products/all", { params });
 };
 
+export const getAllProductsNoPaginateApi = function (params: any) {
+  return AxiosInstance.get("/products/all/noPaginate", { params });
+};
+
 export const findProductBycodeApi = function (params: any) {
   return AxiosInstance.get(`/products/findBycode/${params.code}`);
 };
@@ -20,7 +24,11 @@ export const deleteProductApi = function (params: any) {
   return AxiosInstance.post("/products/destroy", params);
 };
 
-export const stockAdjustmentProductApi = function (params: any) {
+export const getAllStockAdjustmentApi = function (params: any) {
+  return AxiosInstance.get("/products/getAllStockAdjestment", { params });
+};
+
+export const createStockAdjustmentApi = function (params: any) {
   return AxiosInstance.post("/products/stockAdjestment", params);
 };
 

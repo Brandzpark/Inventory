@@ -29,6 +29,7 @@ import { SelectItem } from "../ui/select";
 import { createSalesRepApi, updateSalesRepApi } from "@/api/salesReps";
 import { salutaions } from "@/lib/constants";
 import { ISalesRep } from "@/typings/salesReps";
+import { cn } from "@/lib/utils";
 
 type Props = {
   salesRep?: ISalesRep | null;
@@ -200,6 +201,10 @@ export default function SalesRepForm({ salesRep, customers }: Props) {
                     <FormItem>
                       <FormControl>
                         <Select
+                          classNames={{
+                            option: (state) =>
+                              cn(state.isSelected && "!bg-black"),
+                          }}
                           defaultValue={field.value}
                           isMulti
                           name={field.name}

@@ -44,3 +44,12 @@ export type IProductDepartment = {
   name: string;
   label: string;
 };
+
+export type IStockAdjustment = {
+  _id: string;
+  date: string;
+  type: string;
+  reason: string;
+  description: string;
+  items: any[];
+};

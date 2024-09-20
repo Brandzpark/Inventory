@@ -37,6 +37,7 @@ import {
   createProductDepartmentApi,
 } from "@/api/product";
 import { Switch } from "../ui/switch";
+import { cn } from "@/lib/utils";
 
 type Props = {
   product?: IProduct | null;
@@ -95,14 +96,14 @@ export default function ProductForm({ product }: Props) {
         _id: product?._id,
       });
       toast.success("Item Updated");
-      router.push(`/inventory/view/${values?.code}`);
+      router.push(`/inventory/item/view/${values?.code}`);
       return;
     }
     const { data } = await createProductApi({
       ...values,
     });
     toast.success("Item Created");
-    router.push(`/inventory/view/${values?.code}`);
+    router.push(`/inventory/item/view/${values?.code}`);
     return;
   }
 
@@ -143,6 +144,10 @@ export default function ProductForm({ product }: Props) {
                     <FormLabel>Department *</FormLabel>
                     <FormControl>
                       <CreatableSelect
+                        classNames={{
+                          option: (state) =>
+                            cn(state.isSelected && "!bg-black"),
+                        }}
                         isLoading={loading}
                         value={departments?.find(
                           (row) => row?.name == field.value

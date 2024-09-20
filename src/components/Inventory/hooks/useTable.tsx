@@ -104,14 +104,14 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push(`/inventory/view/${data?.code}`);
+                    router.push(`/inventory/item/view/${data?.code}`);
                   }}
                 >
                   View
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push(`/inventory/${data?.code}`);
+                    router.push(`/inventory/item/${data?.code}`);
                   }}
                 >
                   Edit

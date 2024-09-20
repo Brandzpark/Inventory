@@ -1,6 +1,10 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { getCookie, deleteCookie } from "cookies-next";
-import { usePathname, useRouter } from "next/navigation";
+import {
+  usePathname,
+  useRouter,
+  useSelectedLayoutSegments,
+} from "next/navigation";
 import { AxiosResponse } from "axios";
 import { getMeApi } from "@/api/user";
 import { IUser } from "@/typings/user";
@@ -21,6 +25,7 @@ const MainContextProvider = ({ children }: ProviderPorps) => {
   const [userData, setUserData] = useState<IUser | null>(null);
   const pathName = usePathname();
   const router = useRouter();
+  const rootSegment = useSelectedLayoutSegments()[0];
 
   useEffect(() => {
     async function fetchUserData() {
@@ -34,7 +39,8 @@ const MainContextProvider = ({ children }: ProviderPorps) => {
         console.log(error);
       }
     }
-    if (!["/"].includes(pathName)) {
+
+    if ("(authenticated)" == rootSegment) {
       fetchUserData();
     }
   }, [pathName]);

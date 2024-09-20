@@ -1,22 +1,28 @@
 import React from "react";
 import Header from "@/components/Header/Header";
-import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import SearchInput from "@/components/SearchInput";
+import { Metadata } from "next";
 import InventoryTable from "@/components/Inventory/InventoryTable";
+import StockAdjustmentTable from "@/components/StockAdjustment/StockAdjustmentTable";
+
 const breadcrubmbs = [
   {
     title: "Inventory Management",
     href: "/inventory",
   },
+  {
+    title: "Stock Adjustments",
+    href: "/",
+  },
 ];
 
-type Props = {};
-
 export const metadata: Metadata = {
-  title: "Inventory Management",
+  title: "Stock Adjustments",
 };
+
+type Props = {};
 
 export default function page({}: Props) {
   return (
@@ -25,15 +31,12 @@ export default function page({}: Props) {
       <div className="flex justify-between items-center pb-3">
         <SearchInput />
         <div className="flex justify-end gap-5 items-center">
-          <Link href={"/inventory/item/new"}>
-            <Button>Add New Item</Button>
-          </Link>
-          <Link href={"/inventory/stockAdjustments"}>
-            <Button variant={"outline"}>Stock Adjustment</Button>
+          <Link href={"/inventory/stockAdjustments/new"}>
+            <Button>Create Stock Adjustment</Button>
           </Link>
         </div>
       </div>
-      <InventoryTable />
+      <StockAdjustmentTable />
     </div>
   );
 }

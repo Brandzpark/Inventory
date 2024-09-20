@@ -57,7 +57,6 @@ export default function CustomerForm({ customer }: Props) {
     router.push("/customers");
     return;
   }
-  console.log(customerForm?.formState.errors);
 
   return (
     <Card className="py-1 rounded-sm">

@@ -45,7 +45,7 @@ export default function ProductView({ code }: Props) {
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
             <div>
-              <Link href={`/inventory/${product?.code}`} >
+              <Link href={`/inventory/item/${product?.code}`} >
                 <Button>Edit</Button>
               </Link>
             </div>
