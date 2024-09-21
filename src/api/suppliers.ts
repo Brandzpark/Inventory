@@ -4,8 +4,12 @@ export const getAllSuppliersApi = function (params: any) {
   return AxiosInstance.get("/suppliers/all", { params });
 };
 
-export const findSupplierBycodeApi = function (params: any) {
-  return AxiosInstance.get(`/suppliers/findBycode/${params.code}`);
+export const getAllSuppliersNoPaginateApi = function (params: any) {
+  return AxiosInstance.get("/suppliers/all/noPaginate", { params });
+};
+
+export const findSupplierByCodeApi = function (params: any) {
+  return AxiosInstance.get(`/suppliers/findByCode/${params.code}`);
 };
 
 export const createSupplierApi = function (params: any) {

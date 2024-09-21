@@ -8,8 +8,8 @@ export const createSchema = Yup.object({
   items: Yup.array()
     .of(
       Yup.object({
-        code: Yup.string().required(),
-        quantity: Yup.string().required(),
+        code: Yup.string().required("required field"),
+        quantity: Yup.string().required("required field"),
       })
     )
     .defined()

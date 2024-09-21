@@ -33,7 +33,7 @@ type Props = {
 
 export default function CustomerForm({ customer }: Props) {
   const router = useRouter();
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const customerForm = useForm<any>({
     resolver: yupResolver(createSchema),

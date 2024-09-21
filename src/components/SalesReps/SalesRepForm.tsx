@@ -38,7 +38,7 @@ type Props = {
 
 export default function SalesRepForm({ salesRep, customers }: Props) {
   const router = useRouter();
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const salesRepForm = useForm<any>({
     resolver: yupResolver(createSchema),
@@ -201,10 +201,6 @@ export default function SalesRepForm({ salesRep, customers }: Props) {
                     <FormItem>
                       <FormControl>
                         <Select
-                          classNames={{
-                            option: (state) =>
-                              cn(state.isSelected && "!bg-black"),
-                          }}
                           defaultValue={field.value}
                           isMulti
                           name={field.name}
@@ -215,7 +211,11 @@ export default function SalesRepForm({ salesRep, customers }: Props) {
                           }
                           closeMenuOnSelect={false}
                           options={customers}
-                          className="basic-multi-select"
+                          className="text-sm"
+                          classNames={{
+                            option: (state) =>
+                              cn(state.isSelected && "!bg-black"),
+                          }}
                           classNamePrefix="select"
                         />
                       </FormControl>

@@ -13,10 +13,9 @@ type Props = {};
 
 export default function CustomersTable({}: Props) {
   const searchParams = useSearchParams();
-
   const page = searchParams.get("page") || 1;
   const search = searchParams.get("search") || "";
-  const [data, setdata] = useState<ICustomer[] | []>([]);
+  const [data, setData] = useState<ICustomer[] | []>([]);
   const [pagination, setPagination] = useState<IPaginated | null>(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -26,7 +25,7 @@ export default function CustomersTable({}: Props) {
   async function fetchData() {
     setLoading(true);
     const { data } = await getAllCustomersApi({ page, search });
-    setdata(data?.data?.docs);
+    setData(data?.data?.docs);
     setPagination(data?.data);
     setLoading(false);
   }

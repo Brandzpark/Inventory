@@ -4,7 +4,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { Card } from "@/components/ui/card";
 import CustomerForm from "@/components/Customers/CustomerForm";
 import { ICustomer } from "@/typings/customer";
-import { findCustomerBycodeApi } from "@/api/customer";
+import { findCustomerByCodeApi } from "@/api/customer";
 
 type Props = {
   customercode: string;
@@ -17,7 +17,7 @@ export default function CustomerUpdate({ customercode }: Props) {
   useEffect(() => {
     async function fetchCustomer() {
       setLoading(true);
-      const { data } = await findCustomerBycodeApi({ code: customercode });
+      const { data } = await findCustomerByCodeApi({ code: customercode });
       setCustomer(data?.data);
       setLoading(false);
     }

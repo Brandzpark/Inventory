@@ -20,7 +20,6 @@ import {
 import { createSchema } from "@/validationSchemas/stockAdjustmentSchemas";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { createCustomerApi } from "@/api/customer";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { MainSelect } from "../ui/main-select";
@@ -33,18 +32,18 @@ import {
   getAllProductsNoPaginateApi,
 } from "@/api/product";
 import { cn } from "@/lib/utils";
-import { TrashIcon } from "lucide-react";
+import { TrashIcon, XIcon } from "lucide-react";
 import { DatePicker } from "../ui/date-picker";
 
 type Props = {};
 
-const initalItem = {
+const initialItem = {
   code: "",
   availableQuantity: "",
   quantity: "",
 };
 
-export default function StockAdjustmentForm({}: Props) {
+export default function StockAdjustmentForm({ }: Props) {
   const router = useRouter();
   const [loading, setloading] = useState(false);
   const [products, setProducts] = useState<IProduct[] | []>([]);
@@ -63,7 +62,7 @@ export default function StockAdjustmentForm({}: Props) {
   const form = useForm<any>({
     resolver: yupResolver(createSchema),
     values: {
-      items: [initalItem],
+      items: [initialItem],
     },
   });
 
@@ -80,15 +79,6 @@ export default function StockAdjustmentForm({}: Props) {
     router.push("/inventory/stockAdjustments");
   }
 
-  // function onItemValueChange(index: number, newItem: typeof initalItem) {
-  //   const tempArray = [...items];
-  //   tempArray.splice(index, 1, newItem);
-  //   setItems(tempArray);
-  // }
-
-  function onItemValueChange(name: string, value: string) {
-    form.setValue(name, value);
-  }
 
   return (
     <Card className="py-1 rounded-sm">
@@ -112,6 +102,7 @@ export default function StockAdjustmentForm({}: Props) {
                       <DatePicker
                         value={field.value}
                         onChange={field.onChange}
+                        calendarProps={{ disabled: { before: new Date() } }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -196,144 +187,154 @@ export default function StockAdjustmentForm({}: Props) {
             <CardTitle className="bg-[#FAFAFA] py-2 px-3 rounded-md mt-10">
               Item Table
             </CardTitle>
-            <div className="mt-7 border rounded-md w-fit">
-              <table className="w-full text-sm">
-                <thead className="border-b">
-                  <tr>
-                    <th
-                      align="left"
-                      scope="col"
-                      className="px-6 py-3 font-light"
-                    >
-                      Item
-                    </th>
-                    <th
-                      align="left"
-                      scope="col"
-                      className="px-6 py-3 font-light"
-                    >
-                      Available Quantity
-                    </th>
-                    <th
-                      align="left"
-                      scope="col"
-                      className="px-6 py-3 font-light"
-                    >
-                      Quantity
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items?.map((row: typeof initalItem, index: number) => {
-                    return (
-                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td
-                          align="left"
-                          className="px-6 py-4 min-w-[30rem] w-[30rem] max-w-[30rem]"
-                        >
-                          <FormField
-                            disabled={loading}
-                            control={form.control}
-                            name={`items[${index}].code`}
-                            render={({ field }) => (
-                              <FormItem className="relative pb-5">
-                                <FormControl>
-                                  <Select
-                                    placeholder="Select Item"
-                                    isLoading={productsLoading}
-                                    classNames={{
-                                      option: (state) =>
-                                        cn(state.isSelected && "!bg-black"),
-                                    }}
-                                    defaultValue={products?.find(
-                                      (product) => product?.code == field.value
-                                    )}
-                                    onChange={(value) => {
-                                      const availableQuantity =
-                                        value?.warehouseQuantity?.reduce(
-                                          (acc, curr) => {
-                                            return (
-                                              acc + parseFloat(curr?.quantity)
-                                            );
-                                          },
-                                          0
-                                        );
-                                      field.onChange(value?.code);
-                                      form.setValue(
-                                        `items[${index}].availableQuantity`,
-                                        availableQuantity
-                                      );
-                                    }}
-                                    options={products}
-                                    getOptionValue={(row) => row?._id}
-                                    getOptionLabel={(row) =>
-                                      `(${row?.code}) ${row?.name}`
-                                    }
-                                  />
-                                </FormControl>
-                                <FormMessage className="absolute bottom-0" />
-                              </FormItem>
-                            )}
-                          />
-                        </td>
-                        <td align="right" className="px-6 py-4 w-[15rem]">
-                          <FormField
-                            disabled={true}
-                            control={form.control}
-                            name={`items[${index}].availableQuantity`}
-                            render={({ field }) => (
-                              <FormItem className="relative pb-5">
-                                <FormControl>
-                                  <Input placeholder="" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </td>
-                        <td align="right" className="px-6 py-4 w-[20rem]">
-                          <FormField
-                            disabled={loading}
-                            control={form.control}
-                            name={`items[${index}].quantity`}
-                            render={({ field }) => (
-                              <FormItem className="relative pb-5">
-                                <FormControl>
-                                  <Input placeholder="" {...field} />
-                                </FormControl>
-                                <FormMessage className="absolute bottom-0" />
-                              </FormItem>
-                            )}
-                          />
-                        </td>
-                        <td>
-                          <Button
-                            onClick={() => remove(index)}
-                            disabled={index == 0}
-                            type="button"
-                            size={"icon"}
-                            variant={"destructive"}
-                            className="mb-5 mx-5"
-                          >
-                            <TrashIcon className="w-4" />
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  <tr>
-                    <td colSpan={4} align="left" className="px-6 py-2">
-                      <Button
-                        type="button"
-                        onClick={() => append(initalItem)}
-                        variant={"ghost"}
+            <div className=" relative overflow-x-auto" >
+              <div className="mt-7 border rounded-md w-full">
+                <table className="w-full text-sm">
+                  <thead className="border-b">
+                    <tr>
+                      <th
+                        align="left"
+                        scope="col"
+                        className="px-6 py-3 font-light"
                       >
-                        Add Line Item
-                      </Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                        Item
+                      </th>
+                      <th
+                        align="left"
+                        scope="col"
+                        className="px-6 py-3 font-light"
+                      >
+                        Available Quantity
+                      </th>
+                      <th
+                        align="left"
+                        scope="col"
+                        className="px-6 py-3 font-light"
+                      >
+                        Quantity
+                      </th>
+                      <th
+                        align="left"
+                        scope="col"
+                        className="px-6 py-3 font-light"
+                      >
+
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items?.map((row: typeof initialItem, index: number) => {
+                      return (
+                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <td
+                            align="left"
+                            className="px-6 py-4 min-w-[30rem] w-[30rem] max-w-[30rem]"
+                          >
+                            <FormField
+                              disabled={loading}
+                              control={form.control}
+                              name={`items[${index}].code`}
+                              render={({ field }) => (
+                                <FormItem className="relative pb-5">
+                                  <FormControl>
+                                    <Select
+                                      placeholder="Select Item"
+                                      isLoading={productsLoading}
+                                      className="text-sm"
+                                      classNames={{
+                                        option: (state) =>
+                                          cn(state.isSelected && "!bg-black"),
+                                      }}
+                                      defaultValue={products?.find(
+                                        (product) => product?.code == field.value
+                                      )}
+                                      onChange={(value) => {
+                                        const availableQuantity =
+                                          value?.warehouseQuantity?.reduce(
+                                            (acc, curr) => {
+                                              return (
+                                                acc + parseFloat(curr?.quantity)
+                                              );
+                                            },
+                                            0
+                                          );
+                                        field.onChange(value?.code);
+                                        form.setValue(
+                                          `items[${index}].availableQuantity`,
+                                          availableQuantity
+                                        );
+                                      }}
+                                      options={products}
+                                      getOptionValue={(row) => row?._id}
+                                      getOptionLabel={(row) =>
+                                        `(${row?.code}) ${row?.name}`
+                                      }
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="absolute bottom-0" />
+                                </FormItem>
+                              )}
+                            />
+                          </td>
+                          <td align="right" className="px-6 py-4 min-w-[8rem]">
+                            <FormField
+                              disabled={true}
+                              control={form.control}
+                              name={`items[${index}].availableQuantity`}
+                              render={({ field }) => (
+                                <FormItem className="relative pb-5">
+                                  <FormControl>
+                                    <Input placeholder="" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </td>
+                          <td align="right" className="px-6 py-4 min-w-[8rem]">
+                            <FormField
+                              disabled={loading}
+                              control={form.control}
+                              name={`items[${index}].quantity`}
+                              render={({ field }) => (
+                                <FormItem className="relative pb-5">
+                                  <FormControl>
+                                    <Input placeholder="" {...field} />
+                                  </FormControl>
+                                  <FormMessage className="absolute bottom-0" />
+                                </FormItem>
+                              )}
+                            />
+                          </td>
+                          <td>
+                            <Button
+                              onClick={() => remove(index)}
+                              disabled={index == 0}
+                              type="button"
+                              size={"icon"}
+                              variant={"ghost"}
+                              className="mb-5 mx-5"
+                            >
+                              <XIcon className="w-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    <tr>
+                      <td colSpan={4} align="left" className="px-6 py-2">
+                        <Button
+                          type="button"
+                          onClick={() => append(initialItem)}
+                          variant={"ghost"}
+                        >
+                          Add Line Item
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div className="flex justify-end items-center mt-5">
               <Button size={"lg"} className="w-[10rem]">

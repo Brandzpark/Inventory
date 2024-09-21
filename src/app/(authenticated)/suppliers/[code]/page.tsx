@@ -17,8 +17,8 @@ export default function page({ params }: Props) {
   const { code } = params;
   const breadcrubmbs = [
     {
-      title: "Customers",
-      href: "/customers",
+      title: "Suppliers",
+      href: "/suppliers",
     },
     {
       title: code,

@@ -8,8 +8,8 @@ export const getAllCustomersNoPaginateApi = function (params: any) {
   return AxiosInstance.get("/customers/all/noPaginate", { params });
 };
 
-export const findCustomerBycodeApi = function (params: any) {
-  return AxiosInstance.get(`/customers/findBycode/${params.code}`);
+export const findCustomerByCodeApi = function (params: any) {
+  return AxiosInstance.get(`/customers/findByCode/${params.code}`);
 };
 
 export const createCustomerApi = function (params: any) {

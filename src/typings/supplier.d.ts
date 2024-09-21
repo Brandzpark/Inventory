@@ -1,6 +1,6 @@
 import { IPaginated } from "./typings";
 
-export type ISuppplier = {
+export type ISupplier = {
   _id: string;
   code: string;
   salutation: string;
@@ -12,6 +12,7 @@ export type ISuppplier = {
   taxNo: string;
 };
 
-export type ISuppplierPaginated = {
-  docs: ISuppplier[] | [];
+export type ISupplierPaginated = {
+  docs: ISupplier[] | [];
 } & IPaginated;
+supplier

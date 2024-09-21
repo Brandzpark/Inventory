@@ -64,8 +64,8 @@ export default function SideNavigationBar({}: Props) {
         <SideNavigationBarItem
           title={"Stock Returns"}
           icon={<UndoDotIcon className="w-5 h-5" />}
-          href="/stockReturns"
-          active={pathname.startsWith("/stockReturns")}
+          href="/purchaseOrderReturns"
+          active={pathname.startsWith("/purchaseOrderReturns")}
         />
       </div>
       <div className="text-sm text-slate-500 my-5 uppercase">Sales</div>
