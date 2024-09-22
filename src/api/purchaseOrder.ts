@@ -12,6 +12,15 @@ export const findByCodePurchaseOrderApi = function (params: any) {
     return AxiosInstance.get(`/purchaseOrder/findByCode/${params?.code}`);
 };
 
+
+export const printPurchaseOrderApi = function (params: any) {
+    return AxiosInstance.get(`/purchaseOrder/print/${params?.code}`);
+};
+
+export const printPurchaseOrderURL = function (params: any): string {
+    return AxiosInstance.getUri() + `/purchaseOrder/print/${params?.code}`
+};
+
 export const createPurchaseOrderApi = function (params: any) {
     return AxiosInstance.post("/purchaseOrder/create", params);
 };

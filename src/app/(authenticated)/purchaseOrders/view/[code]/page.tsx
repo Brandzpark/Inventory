@@ -5,6 +5,7 @@ import PurchaseOrderView from "@/components/PurchaseOrders/PurchaseOrderView";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PrinterIcon } from "lucide-react";
+import { printPurchaseOrderURL } from "@/api/purchaseOrder";
 
 type Props = {
     params: {
@@ -23,7 +24,7 @@ export default function page({ params }: Props) {
             title: "Purchase Orders",
             href: "/purchaseOrders",
         },
-    {
+        {
             title: `View - ${code}`,
             href: "",
         },
@@ -32,7 +33,7 @@ export default function page({ params }: Props) {
         <div>
             <Header breadcrumbs={breadcrubmbs} />
             <div className="flex justify-end items-center pb-3 gap-5">
-                <Link href={`/purchaseOrders/print/${code}`}>
+                <Link target="_blank" href={`/purchaseOrders/print/${code}`}>
                     <Button variant={"outline"} className="flex justify-between gap-3" >
                         <PrinterIcon className="w-5" />
                         <div>Print</div>

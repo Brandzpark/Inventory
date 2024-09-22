@@ -56,8 +56,8 @@ export default function page() {
     try {
       const response: AxiosResponse = await loginApi(values);
       setCookie("token", response?.data?.token, { maxAge: 5000000 });
-      setLoading(false);
       router.replace("/dashboard");
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       errorHandler({
