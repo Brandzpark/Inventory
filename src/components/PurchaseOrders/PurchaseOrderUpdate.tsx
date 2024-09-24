@@ -7,6 +7,7 @@ import { IPurchaseOrder } from "@/typings/purchaseOrder";
 import { findByCodePurchaseOrderApi } from "@/api/purchaseOrder";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { isAxiosError } from "axios";
 
 
 type Props = {
@@ -26,8 +27,11 @@ export default function PurchaseOrderUpdate({ code }: Props) {
                 setPurchaseOrder(data?.data);
                 setLoading(false);
             } catch (error) {
-                router.push('/purchaseOrders')
-                toast.error("Purchase Order Not Found",{id: "PO404"})
+                if (isAxiosError(error)) {
+                    router.push('/purchaseOrders')
+                    toast.error(error.response?.data?.errors, { id: "PO404" })
+                }
+
             }
         }
         fetchData();

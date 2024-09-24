@@ -1,9 +1,30 @@
-import React from 'react'
+import React from "react";
+import Header from "@/components/Header/Header";
+import { Metadata } from "next";
+import PurchaseOrderReceivesForm from "@/components/PurchaseOrderReceives/PurchaseOrderReceivesForm";
+
+const breadcrubmbs = [
+    {
+        title: "Purchase Orders Receives",
+        href: "/purchaseOrderReceives",
+    },
+    {
+        title: "Create",
+        href: "",
+    },
+];
+
+export const metadata: Metadata = {
+    title: "Purchase Order Receives Create",
+};
 
 type Props = {}
 
 export default function page({ }: Props) {
     return (
-        <div>page</div>
+        <div>
+            <Header breadcrumbs={breadcrubmbs} />
+            <PurchaseOrderReceivesForm />
+        </div>
     )
 }

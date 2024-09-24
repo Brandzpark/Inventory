@@ -9,7 +9,6 @@ import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -23,7 +22,6 @@ import Select from "react-select";
 import { createSchema } from "@/validationSchemas/purchaseOrderSchemas";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { createCustomerApi, updateCustomerApi } from "@/api/customer";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { IPurchaseOrder } from '@/typings/purchaseOrder';
@@ -68,7 +66,7 @@ export default function PurchaseOrderForm({ purchaseOrder }: Props) {
             { ...purchaseOrder, address: purchaseOrder?.supplier?.address } :
             { items: [initialItem] },
     });
-    
+
 
     useEffect(() => {
         async function fetchProducts() {
@@ -239,7 +237,7 @@ export default function PurchaseOrderForm({ purchaseOrder }: Props) {
                                         <FormControl>
                                             <DatePicker
                                                 value={field.value}
-                                                onChange={field.onChange}
+                                                onChange={(value) => field.onChange(value)}
                                                 calendarProps={{ disabled: { before: new Date() } }}
                                             />
                                         </FormControl>

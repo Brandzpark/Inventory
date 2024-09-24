@@ -45,20 +45,32 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
       accessorKey: "purchaseOrderCode",
       header: "PO Code",
       cell: ({ row }) => {
-        const data = row?.original
+        const data = row?.original;
         return (
-          <Link className="text-blue-500" target="_blank" href={`/purchaseOrders?search=${data?.purchaseOrderCode}`} >{data?.purchaseOrderCode}</Link>
-        )
-      }
+          <Link
+            className="text-blue-500"
+            target="_blank"
+            href={`/purchaseOrders?search=${data?.purchaseOrderCode}`}
+          >
+            {data?.purchaseOrderCode}
+          </Link>
+        );
+      },
     },
     {
       header: "Supplier",
       cell: ({ row }) => {
-        const data = row?.original
+        const data = row?.original;
         return (
-          <Link className="text-blue-500" target="_blank" href={`/suppliers?search=${data?.supplier?.code}`} >{data?.supplier?.name}</Link>
-        )
-      }
+          <Link
+            className="text-blue-500"
+            target="_blank"
+            href={`/suppliers?search=${data?.supplier?.code}`}
+          >
+            {data?.supplier?.name}
+          </Link>
+        );
+      },
     },
     {
       id: "actions",
@@ -74,6 +86,13 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push(`/purchaseOrderReceives/view/${data?.code}`);
+                  }}
+                >
+                  View
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     router.push(`/purchaseOrderReceives/${data?.code}`);

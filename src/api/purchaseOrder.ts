@@ -4,6 +4,10 @@ export const getAllPurchaseOrdersApi = function (params: any) {
     return AxiosInstance.get("/purchaseOrder/all", { params });
 };
 
+export const getAllPurchaseOrdersNoPaginateApi = function (params: any) {
+    return AxiosInstance.get("/purchaseOrder/all/noPaginate", { params });
+};
+
 export const getNextNumberPurchaseOrderApi = function () {
     return AxiosInstance.get("/purchaseOrder/nextNumber");
 };

@@ -10,6 +10,7 @@ export type IPurchaseOrder = {
     subTotal: string
     total: string
     history: IPurchaseOrderHistory[]
+    isReceiveCreated: boolean
 }
 
 
@@ -18,6 +19,7 @@ export type IPurchaseOrderItem = {
     name: string
     remark: string
     quantity: string
+    receivableQuantity: string
     rate: string
     discount: string
     discountAmount: string

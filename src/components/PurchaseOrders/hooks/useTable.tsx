@@ -76,13 +76,15 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
                 >
                   View
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push(`/purchaseOrders/${data?.code}`);
-                  }}
-                >
-                  Edit
-                </DropdownMenuItem>
+                {!data?.isReceiveCreated &&
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push(`/purchaseOrders/${data?.code}`);
+                    }}
+                  >
+                    Edit
+                  </DropdownMenuItem>
+                }
                 <DropdownMenuItem
                   onClick={() => {
                     setSelectedDeleteItem(data);

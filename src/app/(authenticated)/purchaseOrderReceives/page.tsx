@@ -29,7 +29,7 @@ export default function page({ }: Props) {
             <Header breadcrumbs={breadcrubmbs} />
             <div className="flex justify-between items-center pb-3">
                 <SearchInput />
-                <Link href={"/purchaseOrders/new"}>
+                <Link href={"/purchaseOrderReceives/new"}>
                     <Button>Add New Purchase Receive</Button>
                 </Link>
             </div>
