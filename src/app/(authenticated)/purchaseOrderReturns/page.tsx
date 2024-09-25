@@ -8,10 +8,6 @@ import PurchaseOrderReturnsTable from "@/components/PurchaseOrderReturns/Purchas
 
 const breadcrubmbs = [
     {
-        title: "Purchase Orders",
-        href: "/purchaseOrders",
-    },
-    {
         title: "Stock Returns",
         href: "/",
     },
@@ -29,7 +25,7 @@ export default function page({ }: Props) {
             <Header breadcrumbs={breadcrubmbs} />
             <div className="flex justify-between items-center pb-3">
                 <SearchInput />
-                <Link href={"/purchaseOrders/new"}>
+                <Link href={"/purchaseOrderReturns/new"}>
                     <Button>Add New Stock Return</Button>
                 </Link>
             </div>

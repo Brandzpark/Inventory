@@ -225,7 +225,7 @@ export default function StockAdjustmentForm({ }: Props) {
                   <tbody>
                     {items?.map((row: typeof initialItem, index: number) => {
                       return (
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                           <td
                             align="left"
                             className="px-6 py-4 min-w-[30rem] w-[30rem] max-w-[30rem]"

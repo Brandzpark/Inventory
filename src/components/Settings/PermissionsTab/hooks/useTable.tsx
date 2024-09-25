@@ -27,9 +27,9 @@ export function useTable() {
       cell: ({ row }) => {
         const data = row.original;
         return (
-          <div className="flex flex-wrap gap-2" >
-            {data.permissions?.map((permission) => {
-              return <Badge>{permission}</Badge>;
+          <div className="flex flex-wrap gap-2">
+            {data.permissions?.map((permission: string, index: number) => {
+              return <Badge key={permission}>{permission}</Badge>;
             })}
           </div>
         );

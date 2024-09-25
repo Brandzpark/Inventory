@@ -25,13 +25,13 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { MainSelect } from "../ui/main-select";
 import { SelectItem } from "../ui/select";
-import { ISuppplier } from "@/typings/supplier";
+import { ISupplier } from "@/typings/supplier";
 import { createSupplierApi, updateSupplierApi } from "@/api/suppliers";
 
 import { salutaions } from "@/lib/constants";
 
 type Props = {
-  supplier?: ISuppplier | null;
+  supplier?: ISupplier | null;
 };
 
 export default function SupplierForm({ supplier }: Props) {

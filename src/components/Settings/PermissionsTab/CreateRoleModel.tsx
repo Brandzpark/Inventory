@@ -124,7 +124,7 @@ export default function CreateRoleModel({
                     <div className="space-y-2">
                       {row?.permissions?.map((permission) => {
                         return (
-                          <div className="flex items-center gap-2">
+                          <div key={permission.key} className="flex items-center gap-2">
                             <Checkbox
                               checked={
                                 permissionsState &&

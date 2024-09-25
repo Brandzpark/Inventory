@@ -69,7 +69,7 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
                 <tbody>
                   {data?.items?.map((row) => {
                     return (
-                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <tr key={row.code} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td className="px-6 py-4">{row?.code}</td>
                         <td className="px-6 py-4">{row?.name}</td>
                         <td align="right" className="px-6 py-4">

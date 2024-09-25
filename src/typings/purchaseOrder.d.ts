@@ -20,6 +20,7 @@ export type IPurchaseOrderItem = {
     remark: string
     quantity: string
     receivableQuantity: string
+    returnableQuantity: string
     rate: string
     discount: string
     discountAmount: string

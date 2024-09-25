@@ -71,9 +71,9 @@ export const getNextNumberPOReturnApi = function () {
     return AxiosInstance.get("/purchaseOrderReturnStock/nextNumber");
 };
 
-// export const findByCodePOReturnApi = function (params: any) {
-//     return AxiosInstance.get(`/purchaseOrderReturnStock/findByCode/${params?.code}`);
-// };
+export const findByCodePOReturnApi = function (params: any) {
+    return AxiosInstance.get(`/purchaseOrderReturnStock/findByCode/${params?.code}`);
+};
 
 export const createPOReturnApi = function (params: any) {
     return AxiosInstance.post("/purchaseOrderReturnStock/create", params);

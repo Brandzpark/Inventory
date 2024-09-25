@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-    title: "Purchase Order Update",
+    title: "Purchase Order Receive Update",
 };
 
 export default function page({ params }: Props) {

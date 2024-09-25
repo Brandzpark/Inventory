@@ -17,7 +17,7 @@ import {
 
 import Select from "react-select";
 
-import { createSchema } from "@/validationSchemas/purchaseOrderReceiveSchemas";
+import { createSchema } from "@/validationSchemas/purchaseOrderReturnSchemas";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
@@ -27,9 +27,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
   createPOReceiveApi,
+  createPOReturnApi,
   getAllPurchaseOrdersNoPaginateApi,
   getNextNumberPOReceiveApi,
+  getNextNumberPOReturnApi,
   updatePOReceiveApi,
+  updatePOReturnApi,
 } from "@/api/purchaseOrder";
 import { RefreshCcwIcon } from "lucide-react";
 import { DatePicker } from "../ui/date-picker";
@@ -37,63 +40,28 @@ import { IProduct } from "@/typings/product";
 import { getAllProductsNoPaginateApi } from "@/api/product";
 import { formatMoney } from "@/lib/helpers";
 import { Textarea } from "../ui/textarea";
-import { IPurchaseOrderReceived } from "@/typings/purchaseOrderReceived";
 import { format } from "date-fns";
+import { IPurchaseOrderReturn } from "@/typings/purchaseOrderReturn";
 
 type Props = {
-  purchaseOrderReceive?: IPurchaseOrderReceived | null;
+  purchaseOrderReturn?: IPurchaseOrderReturn | null;
 };
 
-export default function PurchaseOrderReceivesForm({
-  purchaseOrderReceive,
+export default function PurchaseOrderReturnsForm({
+  purchaseOrderReturn,
 }: Props) {
   const router = useRouter();
   const [loadingNextNumber, setLoadingNextNumber] = useState(false);
   const [loading, setLoading] = useState(false);
   const [purchaseOrders, setPurchaseOrders] = useState<IPurchaseOrder[] | []>(
-    purchaseOrderReceive ? [purchaseOrderReceive?.purchaseOrder] : []
+    purchaseOrderReturn ? [purchaseOrderReturn?.purchaseOrder] : []
   );
+
   const form = useForm<any>({
     resolver: yupResolver(createSchema),
-    values: purchaseOrderReceive
+    values: purchaseOrderReturn
       ? {
-          ...purchaseOrderReceive,
-          remark: purchaseOrderReceive?.remark,
-          supplier:
-            purchaseOrderReceive?.purchaseOrder?.supplier.code +
-            " | " +
-            purchaseOrderReceive?.purchaseOrder?.supplier.name,
-          requiredDate: format(
-            purchaseOrderReceive?.purchaseOrder?.requiredDate,
-            "Y-MM-dd"
-          ),
-          orderedDate: format(
-            purchaseOrderReceive?.purchaseOrder?.orderDate,
-            "Y-MM-dd"
-          ),
-          items: purchaseOrderReceive?.items?.map((row) => {
-            const poItem = purchaseOrderReceive?.purchaseOrder?.items?.find(
-              (itemRow) => itemRow?.code == row?.code
-            );
-
-            let total = 0;
-
-            if (poItem) {
-              const subTotal =
-                parseFloat(poItem.rate) * parseFloat(row.receivedQuantity);
-              const discount = (subTotal * parseFloat(poItem?.discount)) / 100;
-              total = subTotal - discount;
-            }
-
-            return {
-              ...row,
-              ...poItem,
-              requestAmount: String(total),
-              receivableQuantity:
-                Number(poItem?.receivableQuantity) +
-                Number(row?.receivedQuantity),
-            };
-          }),
+          ...purchaseOrderReturn,
         }
       : { items: [] },
   });
@@ -105,7 +73,7 @@ export default function PurchaseOrderReceivesForm({
       setPurchaseOrders(data?.data);
       setLoading(false);
     }
-    if (!purchaseOrderReceive) {
+    if (!purchaseOrderReturn) {
       fetchNextNumber();
       fetchData();
     }
@@ -113,60 +81,33 @@ export default function PurchaseOrderReceivesForm({
 
   async function fetchNextNumber() {
     setLoadingNextNumber(true);
-    const { data } = await getNextNumberPOReceiveApi();
+    const { data } = await getNextNumberPOReturnApi();
     form.setValue("code", data?.nextNumber);
     setLoadingNextNumber(false);
   }
 
   async function onSubmit(values: Yup.InferType<typeof createSchema>) {
-    if (purchaseOrderReceive) {
-      const { data } = await updatePOReceiveApi({
-        _id: purchaseOrderReceive?._id,
+    if (purchaseOrderReturn) {
+      const { data } = await updatePOReturnApi({
+        _id: purchaseOrderReturn?._id,
         ...values,
       });
-      toast.success("Purchase Order Receive Updated");
-      router.push(`/purchaseOrderReceives/view/${purchaseOrderReceive?.code}`);
+      toast.success("Stock Return Updated");
+      router.push(`/purchaseOrderReturns/view/${purchaseOrderReturn?.code}`);
       return;
     }
-    const { data } = await createPOReceiveApi({ ...values });
-    toast.success("Purchase Order Receive Created");
-    router.push(`/purchaseOrderReceives/view/${values?.code}`);
+    const { data } = await createPOReturnApi({ ...values });
+    toast.success("Stock Return Created");
+    router.push(`/purchaseOrderReturns/view/${values?.code}`);
     return;
   }
 
   const items = form.watch("items");
-  const values = useWatch({ control: form.control });
-
-  const mainSubTotal = useMemo(
-    () =>
-      values?.items?.reduce((acc: string, curr: any) => {
-        return (
-          acc + parseFloat(curr?.receivedQuantity || 0) * parseFloat(curr?.rate)
-        );
-      }, 0),
-    [values]
-  );
-  const mainDiscount = useMemo(
-    () =>
-      values?.items?.reduce((acc: string, curr: any) => {
-        const subTotal =
-          parseFloat(curr?.receivedQuantity || 0) * parseFloat(curr?.rate);
-
-        return acc + (subTotal * parseFloat(curr?.discount)) / 100;
-      }, 0),
-    [values]
-  );
-
-  const mainTotal = useMemo(
-    () => mainSubTotal - mainDiscount,
-    [mainSubTotal, mainDiscount]
-  );
-
   return (
     <Card className="py-1 rounded-sm">
       <CardHeader className="p-0 py-6 px-6">
         <CardTitle className="bg-[#FAFAFA] py-2 px-3 rounded-md">
-          Purchases Order Details
+          Stock Return Details
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -179,17 +120,17 @@ export default function PurchaseOrderReceivesForm({
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Purchases Received#*</FormLabel>
+                    <FormLabel>PSR#*</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
-                          placeholder="Purchases Received#"
+                          placeholder="PSR#"
                           {...field}
-                          disabled={purchaseOrderReceive ? true : false}
+                          disabled={purchaseOrderReturn ? true : false}
                         />
                         <Button
                           disabled={
-                            loading || purchaseOrderReceive ? true : false
+                            loading || purchaseOrderReturn ? true : false
                           }
                           onClick={() => fetchNextNumber()}
                           type="button"
@@ -213,12 +154,16 @@ export default function PurchaseOrderReceivesForm({
               <FormField
                 disabled={loading}
                 control={form.control}
-                name="supplier"
+                name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Supplier ID</FormLabel>
+                    <FormLabel>Stock Return Date*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Supplier ID" {...field} disabled />
+                      <DatePicker
+                        value={field.value}
+                        onChange={(value) => field.onChange(value)}
+                        calendarProps={{ disabled: { before: new Date() } }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -234,7 +179,7 @@ export default function PurchaseOrderReceivesForm({
                       <FormLabel>Purchases Order#*</FormLabel>
                       <FormControl>
                         <Select
-                          isDisabled={purchaseOrderReceive ? true : false}
+                          isDisabled={purchaseOrderReturn ? true : false}
                           placeholder="Select Purchases Order"
                           value={purchaseOrders?.find(
                             (row) => row?.code == field.value
@@ -244,21 +189,20 @@ export default function PurchaseOrderReceivesForm({
                             field.onChange(value?.code);
                             if (value) {
                               form.setValue(
-                                "orderedDate",
-                                format(value?.orderDate, "Y-MM-dd")
-                              );
-                              form.setValue(
-                                "requiredDate",
-                                format(value?.requiredDate, "Y-MM-dd")
-                              );
-                              form.setValue(
                                 "supplier",
                                 value?.supplier?.code +
                                   " | " +
                                   value?.supplier?.name
                               );
-                              if (!purchaseOrderReceive) {
-                                form.setValue("items", value?.items);
+                              if (!purchaseOrderReturn) {
+                                const mappedItems = value?.items?.map((row) => {
+                                  return {
+                                    ...row,
+                                    quantity: "",
+                                    remark: "",
+                                  };
+                                });
+                                form.setValue("items", mappedItems);
                               }
                             }
                           }}
@@ -285,44 +229,12 @@ export default function PurchaseOrderReceivesForm({
               <FormField
                 disabled={loading}
                 control={form.control}
-                name="orderedDate"
+                name="supplier"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Order Date</FormLabel>
+                    <FormLabel>Supplier ID</FormLabel>
                     <FormControl>
-                      <Input placeholder="Order Date" {...field} disabled />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                disabled={loading}
-                control={form.control}
-                name="requiredDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Required Date</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Required Date" {...field} disabled />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                disabled={loading}
-                control={form.control}
-                name="receivedDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Received Date*</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        value={field.value}
-                        onChange={(value) => field.onChange(value)}
-                        calendarProps={{ disabled: { before: new Date() } }}
-                      />
+                      <Input placeholder="Supplier ID" {...field} disabled />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -349,14 +261,14 @@ export default function PurchaseOrderReceivesForm({
                         scope="col"
                         className="px-3 py-3 font-light"
                       >
-                        Ordered
+                        Remark
                       </th>
                       <th
                         align="left"
                         scope="col"
                         className="px-3 py-3 font-light"
                       >
-                        Received
+                        Qty
                       </th>
                       <th
                         align="left"
@@ -371,13 +283,6 @@ export default function PurchaseOrderReceivesForm({
                         className="px-3 py-3 font-light"
                       >
                         Discount
-                      </th>
-                      <th
-                        align="left"
-                        scope="col"
-                        className="px-3 py-3 font-light"
-                      >
-                        Req Amount
                       </th>
                       <th
                         align="right"
@@ -400,12 +305,6 @@ export default function PurchaseOrderReceivesForm({
                     <tbody>
                       {items?.map((row: any, index: number) => {
                         const item = row;
-                        const total =
-                          parseFloat(item?.rate) * parseFloat(item?.quantity);
-                        const discountAmount = item?.discount
-                          ? (total * parseFloat(item?.discount)) / 100
-                          : 0;
-                        const subTotal = total - discountAmount || 0;
                         return (
                           <tr
                             key={index}
@@ -436,24 +335,13 @@ export default function PurchaseOrderReceivesForm({
                             >
                               <FormField
                                 control={form.control}
-                                name={`items[${index}].quantity`}
+                                name={`items[${index}].remark`}
                                 render={({ field }) => (
                                   <FormItem className="relative pb-5">
                                     <FormControl>
-                                      <Input
-                                        type="number"
-                                        placeholder=""
-                                        {...field}
-                                        disabled={true}
-                                      />
+                                      <Input placeholder="" {...field} />
                                     </FormControl>
-                                    <div className="absolute bottom-0">
-                                      <div className="text-left text-xs  text-slate-400">
-                                        Receivable Quantity :{" "}
-                                        {item?.receivableQuantity}
-                                      </div>
-                                      <FormMessage />
-                                    </div>
+                                    <FormMessage />
                                   </FormItem>
                                 )}
                               />
@@ -464,7 +352,7 @@ export default function PurchaseOrderReceivesForm({
                             >
                               <FormField
                                 control={form.control}
-                                name={`items[${index}].receivedQuantity`}
+                                name={`items[${index}].quantity`}
                                 render={({ field }) => (
                                   <FormItem className="relative pb-5">
                                     <FormControl>
@@ -488,7 +376,13 @@ export default function PurchaseOrderReceivesForm({
                                         }}
                                       />
                                     </FormControl>
-                                    <FormMessage className="whitespace-nowrap" />
+                                    <div className="absolute bottom-0">
+                                      <div className="text-left text-xs  text-slate-400">
+                                        Returnable Quantity :{" "}
+                                        {item?.returnableQuantity}
+                                      </div>
+                                      <FormMessage />
+                                    </div>
                                   </FormItem>
                                 )}
                               />
@@ -528,14 +422,6 @@ export default function PurchaseOrderReceivesForm({
                                   </FormItem>
                                 )}
                               />
-                            </td>
-                            <td
-                              align="right"
-                              className="px-3 py-4 min-w-[8rem]"
-                            >
-                              <div className="mb-5 cursor-no-drop rounded-md border h-9 w-full opacity-55 flex items-center px-3 py-1">
-                                {formatMoney(String(subTotal))}
-                              </div>
                             </td>
                             <td
                               align="right"
@@ -589,7 +475,7 @@ export default function PurchaseOrderReceivesForm({
                         );
                       }}
                     />
-                    <div className="border rounded-md text-sm">
+                    {/* <div className="border rounded-md text-sm">
                       <table className="w-full">
                         <tbody>
                           <tr className="border-b">
@@ -612,29 +498,10 @@ export default function PurchaseOrderReceivesForm({
                           </tr>
                         </tbody>
                       </table>
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </div>
-            </div>
-            <div className="flex justify-end gap-5 items-center mt-5">
-              <Link href={"/purchaseOrderReceives"}>
-                <Button
-                  type="button"
-                  size={"lg"}
-                  variant={"outline"}
-                  className="w-[10rem]"
-                >
-                  Cancel
-                </Button>
-              </Link>
-              <Button
-                disabled={items?.length == 0}
-                size={"lg"}
-                className="w-[10rem]"
-              >
-                {purchaseOrderReceive ? "Update" : "Create"}
-              </Button>
             </div>
           </form>
         </Form>

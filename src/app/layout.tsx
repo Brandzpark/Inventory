@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Providers from "@/lib/providers";
 import { Toaster } from "@/components/ui/sonner";
+import { Suspense } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body className={cn(inter.className)}>
         <div className="flex justify-center items-center min-h-[50vh] lg:min-h-screen bg-slate-50">
           <Toaster />
-          <Providers>{children}</Providers>
+          <Providers>
+            <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
+          </Providers>
         </div>
       </body>
     </html>

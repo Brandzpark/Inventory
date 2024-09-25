@@ -17,7 +17,7 @@ export default function ImagePicker({
   onChange,
   value,
   error,
-  disabled
+  disabled,
 }: Props) {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -34,8 +34,7 @@ export default function ImagePicker({
       maxFiles: 1,
       multiple: false,
       maxSize: 500000,
-      disabled: disabled
-      
+      disabled: disabled,
     });
 
   const localError = fileRejections?.[0]?.errors?.[0]?.message;
@@ -55,6 +54,7 @@ export default function ImagePicker({
         >
           {value ? (
             <img
+              alt="imagePicker"
               src={
                 typeof value == "string" ? value : URL.createObjectURL(value)
               }

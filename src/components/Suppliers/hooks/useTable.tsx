@@ -11,13 +11,13 @@ import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ISuppplier } from "@/typings/supplier";
+import { ISupplier } from "@/typings/supplier";
 import { deleteSupplierApi } from "@/api/suppliers";
 
 export function useTable({ fetchData }: { fetchData: () => void }) {
   const router = useRouter();
   const [selectedDeleteItem, setSelectedDeleteItem] =
-    useState<ISuppplier | null>(null);
+    useState<ISupplier | null>(null);
 
   async function onDelete() {
     const { data } = await deleteSupplierApi({ _id: selectedDeleteItem?._id });
@@ -30,7 +30,7 @@ export function useTable({ fetchData }: { fetchData: () => void }) {
     setSelectedDeleteItem(null);
   }
 
-  const columns: ColumnDef<ISuppplier>[] | [] = [
+  const columns: ColumnDef<ISupplier>[] | [] = [
     {
       accessorKey: "code",
       header: "Code",
