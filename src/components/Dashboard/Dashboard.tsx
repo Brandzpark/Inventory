@@ -69,7 +69,7 @@ export default function Dashboard({}: Props) {
     }
   }
   return (
-    <Card className="w-[26rem]">
+    <Card className="w-[26rem] h-fit">
       <CardHeader className="flex justify-center items-center">
         <Icons.Logo />
       </CardHeader>

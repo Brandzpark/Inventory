@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IPurchaseOrder, IPurchaseOrderItem } from "@/typings/purchaseOrder";
-import {
-  findByCodePOReceiveApi,
-  findByCodePurchaseOrderApi,
-} from "@/api/purchaseOrder";
+import { findByCodePOReceiveApi } from "@/api/purchaseOrder";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Label } from "../ui/label";
