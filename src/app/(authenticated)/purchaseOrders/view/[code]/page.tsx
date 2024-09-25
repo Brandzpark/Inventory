@@ -2,8 +2,6 @@ import React from "react";
 import Header from "@/components/Header/Header";
 import { Metadata } from "next";
 import PurchaseOrderView from "@/components/PurchaseOrders/PurchaseOrderView";
-import puppeteer from "puppeteer";
-import { printPurchaseOrderApi } from "@/api/purchaseOrder";
 
 type Props = {
   params: {
