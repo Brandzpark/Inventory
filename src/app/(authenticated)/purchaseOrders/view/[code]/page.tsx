@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "Purchase Order View",
 };
 
-export async function fetchPdf(code: string) {
+async function fetchPdf(code: string) {
   const { data } = await printPurchaseOrderApi({ code });
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
