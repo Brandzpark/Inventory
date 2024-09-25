@@ -15,31 +15,8 @@ export const metadata: Metadata = {
   title: "Purchase Order View",
 };
 
-async function fetchPdf(code: string) {
-  const { data } = await printPurchaseOrderApi({ code });
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.setContent(data?.htmlContent);
-  const pdfBuffer = await page.pdf({
-    format: "A4",
-    printBackground: true,
-  });
-  await browser.close();
-
-  const pdfArray: number[] = Object.values(pdfBuffer);
-  // const buffer = Buffer.from(pdfArray);
-  // console.log(buffer);
-  return pdfArray;
-  // return new Response(buffer, {
-  //   headers: {
-  //     "Content-Type": "application/pdf",
-  //   },
-  // });
-}
-
 export default async function page({ params }: Props) {
   const { code } = params;
-  const pdfArray = await fetchPdf(code);
   const breadcrubmbs = [
     {
       title: "Purchase Orders",
@@ -53,7 +30,7 @@ export default async function page({ params }: Props) {
   return (
     <div>
       <Header breadcrumbs={breadcrubmbs} />
-      <PurchaseOrderView code={code} pdfArray={pdfArray} />
+      <PurchaseOrderView code={code} />
     </div>
   );
 }

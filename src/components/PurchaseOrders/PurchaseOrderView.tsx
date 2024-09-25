@@ -17,12 +17,9 @@ import { PrinterIcon } from "lucide-react";
 
 type Props = {
   code: string;
-  pdfArray: any[];
 };
 
-export default function PurchaseOrderView({ code, pdfArray }: Props) {
-  console.log(pdfArray);
-
+export default function PurchaseOrderView({ code }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [purchaseOrder, setPurchaseOrder] = useState<IPurchaseOrder | null>(
@@ -44,19 +41,6 @@ export default function PurchaseOrderView({ code, pdfArray }: Props) {
     fetchData();
   }, []);
 
-  const onClick = () => {
-    const buffer = Buffer.from(pdfArray);
-    const blob = new Blob([buffer], { type: "application/pdf" });
-    const objectURL = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = objectURL;
-    link.setAttribute("target", "_blank");
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(objectURL);
-  };
-
   return (
     <>
       {loading ? (
@@ -66,14 +50,6 @@ export default function PurchaseOrderView({ code, pdfArray }: Props) {
       ) : (
         <div>
           <div className="flex justify-end items-center pb-3 gap-5">
-            <Button
-              onClick={onClick}
-              variant={"outline"}
-              className="flex justify-between gap-3"
-            >
-              <PrinterIcon className="w-5" />
-              <div>Print</div>
-            </Button>
             <Link target="_blank" href={`/purchaseOrders/print/${code}`}>
               <Button
                 variant={"outline"}
