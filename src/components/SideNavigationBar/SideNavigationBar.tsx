@@ -61,12 +61,12 @@ export default function SideNavigationBar({}: Props) {
           href="/purchaseOrderReceives"
           active={pathname.startsWith("/purchaseOrderReceives")}
         />
-        <SideNavigationBarItem
+        {/* <SideNavigationBarItem
           title={"Stock Returns"}
           icon={<UndoDotIcon className="w-5 h-5" />}
           href="/purchaseOrderReturns"
           active={pathname.startsWith("/purchaseOrderReturns")}
-        />
+        /> */}
       </div>
       <div className="text-sm text-slate-500 my-5 uppercase">Sales</div>
       <div className="grid gap-3">
@@ -82,7 +82,7 @@ export default function SideNavigationBar({}: Props) {
           href="/salesReps"
           active={pathname.startsWith("/salesReps")}
         />
-        <SideNavigationBarItem
+        {/* <SideNavigationBarItem
           title={"Invoices"}
           icon={<FileSpreadsheetIcon className="w-5 h-5" />}
           href="/invoices"
@@ -93,9 +93,9 @@ export default function SideNavigationBar({}: Props) {
           icon={<UndoDotIcon className="w-5 h-5" />}
           href="/salesReturns"
           active={pathname.startsWith("/salesReturns")}
-        />
+        /> */}
       </div>
-      <div className="text-sm text-slate-500 my-5 uppercase">FINANCE</div>
+      {/* <div className="text-sm text-slate-500 my-5 uppercase">FINANCE</div>
       <SideNavigationBarItem
         title={"Payments Received"}
         icon={<DollarSignIcon className="w-5 h-5" />}
@@ -120,7 +120,7 @@ export default function SideNavigationBar({}: Props) {
         icon={<AreaChartIcon className="w-5 h-5" />}
         href="/reports"
         active={pathname.startsWith("/reports")}
-      />
+      /> */}
     </div>
   );
 }

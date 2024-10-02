@@ -55,11 +55,11 @@ export default function Header({ breadcrumbs, title }: Props) {
                 </Breadcrumb>
             }
             <div className='flex gap-5 items-center' >
-                <Link href={'/'}>
+                {/* <Link href={'/'}>
                     <div className='group transition-all  w-10 h-10 border bg-white rounded-full flex justify-center items-center' >
                         <BellIcon className='w-5 h-5 transition-all text-[#B2B2B2] group-hover:text-black' />
                     </div>
-                </Link>
+                </Link> */}
                 <Link href={'/settings/user-management'}>
                     <div className='group transition-all  w-10 h-10 border bg-white rounded-full flex justify-center items-center' >
                         <SettingsIcon className='w-5 h-5 transition-all text-[#B2B2B2] group-hover:text-black' />

@@ -22,7 +22,7 @@ export default function MainTabs({ tab }: Props) {
         <TabsTrigger value="profile">Profile Settings</TabsTrigger>
         <TabsTrigger value="user-management">User Management</TabsTrigger>
         <TabsTrigger value="permissions">Permissions Management</TabsTrigger>
-        <TabsTrigger value="notification">Notifications</TabsTrigger>
+        {/* <TabsTrigger value="notification">Notifications</TabsTrigger> */}
       </TabsList>
       {tab == "profile" && <ProfileTab />}
       {tab == "user-management" && <UserManagementTab />}
